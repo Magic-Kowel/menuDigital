@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, {useState} from 'react';
+import ItemNavigation from './ItemNavigation';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -18,6 +19,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import PeopleIcon from '@mui/icons-material/People';
+import { Height } from '@mui/icons-material';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -99,7 +101,10 @@ export default function Navigation(props) {
     };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ 
+      display: 'flex',
+      minHeight: '100vh'
+    }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -129,24 +134,13 @@ export default function Navigation(props) {
         <Divider />
         <List>
             <ListItem  disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                <StorefrontIcon />
-                </ListItemIcon>
-                <ListItemText primary="Restaurante" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
+            <ItemNavigation
+              route="/restaurant"
+              name="Restaurante"
+              open={open}
+            >
+              <StorefrontIcon />
+            </ItemNavigation>
             </ListItem>
             <ListItem  disablePadding sx={{ display: 'block' }}>
               <ListItemButton

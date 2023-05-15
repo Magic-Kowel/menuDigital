@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState ={
+    token:"",
     users:[]
 }
 const userSlice = createSlice({
@@ -11,10 +12,13 @@ const userSlice = createSlice({
 
     },
     reducers: {
+        setUser: (state, action) => {
+            state.token = action.payload.token;
+        },
         createUser: async (state, action) => {
             try {
-                console.log(`${BASE_URL}usuarios`);
-                const response = await axios.post(`${BASE_URL}usuarios`, action.payload);
+                console.log(`${BASE_URL}user`);
+                const response = await axios.post(`${BASE_URL}user`, action.payload);
                 return response.status;
             } catch (error) {
                 console.error(error);
@@ -22,7 +26,7 @@ const userSlice = createSlice({
         },
         loginUser: async(state, action)=>{
             try{
-                const response = await axios.post(`${BASE_URL}usuarios/login`, action.payload);
+                const response = await axios.post(`${BASE_URL}user/login`, action.payload);
                 return response.data;
             }catch(error){
                 console.error(error);
@@ -30,5 +34,5 @@ const userSlice = createSlice({
         }
     },
 });
-export const {createUser, loginUser} = userSlice.actions;
+export const {createUser, loginUser, setUser} = userSlice.actions;
 export default userSlice.reducer;

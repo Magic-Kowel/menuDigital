@@ -1,12 +1,12 @@
 import jwtDecode from 'jwt-decode';
+import { NAME_TOKEN } from '../config';
 export function createToken(token){
-    sessionStorage.setItem('token', token);
+    sessionStorage.setItem(NAME_TOKEN, token);
 }
 function validateToken(token) {
     const decoded = jwtDecode(token);
     const userId = decoded.id;
     const permiso = decoded.permiso;
-    console.log(decoded);
     const currentTime = Date.now() / 1000;
     if (decoded.exp < currentTime) {
         return {
@@ -22,7 +22,7 @@ function validateToken(token) {
     };
 }
 export function IsLogged(){;
-    const token = sessionStorage.getItem('token');
+    const token = sessionStorage.getItem(NAME_TOKEN);
     if(!token){
         return {
             userId:0,
@@ -36,7 +36,8 @@ export function IsLogged(){;
         return {
             userId,
             permiso,
-            auth:true
+            auth:true,
+            token
         }
     }
     return {
