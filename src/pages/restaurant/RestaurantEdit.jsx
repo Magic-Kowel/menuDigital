@@ -1,7 +1,12 @@
 import React,{ useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import Navigation from "../../components/Navigation";
-import { getRestaurant } from "../../api/restaurant/restaurant";
+import { 
+    getRestaurant,
+    updateRestaurant
+} from "../../api/restaurant/restaurant";
 import Footer from "../../components/Footer";
 import { 
     Grid,
@@ -9,34 +14,70 @@ import {
     TextField,
     Typography,
     Box,
-    Button,
-    Input,
-    IconButton, 
-    Card,
-    CardMedia,
-    CardContent,
-    CardActions
+    Button
 } from "@mui/material";
-import BackupIcon from '@mui/icons-material/Backup';
+import UploadImagen from "../../components/UploadImagen";
 function RestaurantEdit(){
+    const navigate = useNavigate();
     const {idRestaurant} = useParams();
     const [restaurant, setRestaurant] = useState({
         restaurante_id:0,
         nombre:'',
-        path:''
+        path:null
     });
-    const [selectedFile, setSelectedFile] = useState(restaurant.path);
-    const handleFileChange = (event) => {
-        setSelectedFile(URL.createObjectURL(event.target.files[0]));
-    };
+    const [selectedFile, setSelectedFile] = useState("");
+
     const getRestaurantData = async (idRestaurant)=> {
         const response = await getRestaurant(idRestaurant);
         setRestaurant(response);
-        console.log(response);
+        await setSelectedFile(restaurant.path);
+    }
+    const handleUpdateRestaurant = async (event) => {
+        event.preventDefault();
+        if(restaurant.nombre.trim()===""){
+            Swal.fire({
+              icon: "info",
+              title: 'Error',
+              text: 'Rellene nombre',
+            })
+            return false;
+        }
+        const imagen = selectedFile;
+        setRestaurant({
+            ...restaurant,
+            path:selectedFile
+        })
+        console.log("restaurant",restaurant);
+        const response = await updateRestaurant(restaurant,selectedFile);
+        if(response.update){
+            Swal.fire({
+                icon:"success",
+                title:'Editado',
+                text:'Restaurante actualizado con éxito',
+                timer: 5000,
+            }).then(()=>{
+                navigate("/restaurant");
+            })
+        }else{
+            Swal.fire({
+                icon:"error",
+                title:'Error',
+                text:'Error al actualizar restaurante',
+            })
+        }
     }
     useEffect(()=>{
         getRestaurantData(idRestaurant);
-    },[])
+        console.log(selectedFile);
+    },[restaurant.path]);
+    // useEffect(()=>{
+    //     console.log("imagen update",selectedFile);
+    //     setRestaurant({
+    //       ...restaurant,
+    //       path:selectedFile
+    //     });
+    //     console.log("imagen update2",restaurant);
+    //   },[selectedFile]);
     return(
         <>
             <Navigation>
@@ -48,7 +89,9 @@ function RestaurantEdit(){
                                     margin:5
                                 }}
                             >
-                                <form>
+                                <form
+                                    onSubmit={handleUpdateRestaurant}
+                                >
                                         <Typography
                                             component='h3'
                                             mt={2} 
@@ -65,6 +108,12 @@ function RestaurantEdit(){
                                             label="Nombre" 
                                             variant="standard"
                                             value={restaurant.nombre}
+                                            onChange={(e)=>{
+                                                setRestaurant({
+                                                    ...restaurant,
+                                                    nombre:e.target.value
+                                                })
+                                            }}
                                             fullWidth
                                             sx={{marginTop:3}}
                                         />
@@ -83,42 +132,14 @@ function RestaurantEdit(){
                             </Box>
                         </Grid>
                         <Grid item sm={12} md={4}>
-                            <Card
-                                sx={{
-                                    margin:5,
-                                    width:"20rem",
-                                }}
-                            > 
-                                <CardContent>
-                                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                        <CardMedia
-                                            component="img"
-                                            sx={{ width:250 }}
-                                            image={selectedFile}
-                                            title=""
-                                        />
-                                    </Box>
-                                </CardContent>
-                                <CardActions>
-                                    <Button
-                                    fullWidth
-                                    component="label"
-                                    variant="contained"
-                                    startIcon={<BackupIcon />}>
-                                        Subir
-                                        <Input 
-                                            type="file"
-                                            sx={{display:"none"}} 
-                                            onChange={handleFileChange}
-                                        />
-                                    </Button>
-                                </CardActions>
-                            </Card>
+                            <UploadImagen 
+                                setSelectedFile={setSelectedFile}
+                                selectedFile={selectedFile}
+                            />
                         </Grid>
                     </Grid>
                 </Paper>
             </Navigation>
-            <Footer />
         </>
     );
 }

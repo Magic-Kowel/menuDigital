@@ -1,16 +1,25 @@
-import { Box } from "@mui/material";
+import { Grid,Box } from "@mui/material";
 function Footer(){
     return(
-        <Box component='footer' 
-            sx={{
-                background:'#000',
-                width:"100%",
-                paddingTop: "3rem",
-                paddingBottom: "3rem"
-            }}
-        >
+        <Grid
+        mt={5}
+        component='footer' 
+        justifyContent="center"   
+        spacing={2}>
+            <Grid item xs={12}>
+                <Box 
+                    sx={{
+                        background:'#000',
+                        width:"100%",
+                        paddingTop: "3rem",
+                        paddingBottom: "3rem"
+                    }}
+                    >
+                    
+                </Box>
+            </Grid>
 
-        </Box>
+        </Grid>
     );
 }
 export default Footer;

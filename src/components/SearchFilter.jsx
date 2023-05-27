@@ -5,7 +5,6 @@ import { Box } from '@mui/material';
 export default function SearchFilter({dataSearch,setSelectedOption}) {
     return (
         <Autocomplete
-            fullWidth
             disablePortal
             options={dataSearch}
             getOptionLabel={(option) => option.nombre}

@@ -10,6 +10,7 @@ import {
     deleteRestaurant, 
     getRestaurantsUser 
 } from '../api/restaurant/restaurant';
+import { BASE_URL } from '../config';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 function CardRestaurantUser(props){
@@ -50,7 +51,7 @@ function CardRestaurantUser(props){
                 component="img"
                 alt={name}
                 height="140"
-                image={path}
+                image={`${BASE_URL}${path}`}
             />
             <CardContent>
                 <Typography 

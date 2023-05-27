@@ -28,21 +28,28 @@ export async function getRestaurant(idRestaurand){
         console.error(error);
     }
 }
-export async function createRestaurant(name){
+export async function createRestaurant(restaurant){
     try{
         const token = sessionStorage.getItem(NAME_TOKEN);
-        const response = await axios.post(
-            `${BASE_URL}restaurant`,
-            {
-              name: name
-            },
-            {
-              headers: {
-                "x-access-token": token
-              }
-            }
-          );
-        return response.data;
+        try {
+            const {name,img} = restaurant;
+            const formdata = new FormData()
+            formdata.append('file', img)
+            formdata.append('name', name)
+            console.log(formdata.getAll("file"));
+            const response = await axios.post(`${BASE_URL}restaurant`, formdata,  {
+                headers: {
+                    "x-access-token": token,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log(response);
+            return response;
+        } catch (error) {
+          // Manejar cualquier error en la petición
+          console.error(error);
+        }
+
     }catch(error){
         console.error(error);
     }
@@ -55,4 +62,31 @@ export async function deleteRestaurant(idRestaurand){
         }
     });
     return response.status;
+}
+export async function updateRestaurant(restaurant,path){
+    const {nombre,restaurante_id} = restaurant;
+    try{
+        const formdata = new FormData()
+        if(path  instanceof File){
+            formdata.append('file', path);
+        }else{
+            formdata.append('file', null);
+        }
+        formdata.append('name', nombre)
+        // console.log(formdata.getAll("file"));
+        const token = sessionStorage.getItem(NAME_TOKEN);
+        const response = await axios.patch(
+            `${BASE_URL}restaurant/${restaurante_id}`,
+            formdata,
+            {
+              headers: {
+                "x-access-token": token,
+                'Content-Type': 'multipart/form-data'
+              }
+            }
+          );
+        return response.data;
+    }catch(error){
+        console.error(error);
+    }
 }
