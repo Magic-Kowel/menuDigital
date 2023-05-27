@@ -1,5 +1,5 @@
 import React,{ useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import Navigation from "../../components/Navigation";
@@ -7,15 +7,17 @@ import {
     getRestaurant,
     updateRestaurant
 } from "../../api/restaurant/restaurant";
-import Footer from "../../components/Footer";
 import { 
     Grid,
     Paper,
     TextField,
     Typography,
     Box,
-    Button
+    Button,
+    IconButton,
+    Tooltip
 } from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import UploadImagen from "../../components/UploadImagen";
 function RestaurantEdit(){
     const navigate = useNavigate();
@@ -82,6 +84,13 @@ function RestaurantEdit(){
         <>
             <Navigation>
                 <Paper elevation={3}>
+                <Tooltip title="Regresar">
+                    <IconButton>
+                        <Link to="/restaurant">
+                            <ArrowBackIcon />
+                        </Link>
+                    </IconButton>
+                </Tooltip>
                     <Grid container spacing={2}>
                         <Grid item md={8} sm={12}>
                             <Box
