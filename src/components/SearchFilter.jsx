@@ -1,7 +1,5 @@
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import SearchIcon from '@mui/icons-material/Search';
-import { Box } from '@mui/material';
 export default function SearchFilter({dataSearch,setSelectedOption}) {
     return (
         <Autocomplete

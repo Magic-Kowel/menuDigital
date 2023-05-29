@@ -1,10 +1,11 @@
 import { Route,Routes } from "react-router-dom";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import RegisterUser from "./pages/Signon";
 import Home from "./pages/Home";
 import Restaurant from "./pages/restaurant/Restaurant";
 import RestaurantEdit from "./pages/restaurant/RestaurantEdit";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import Seccions from "./pages/seccion/Seccions";
 import User from "./pages/user/User";
 import NotFound from "./pages/NotFound";
 function App() {
@@ -25,6 +26,13 @@ function App() {
               permission="restaurant"
             >
               <RestaurantEdit />
+            </ProtectedRoute>
+          } />
+          <Route path="/seccions/:idRestaurant" element={
+            <ProtectedRoute
+              permission="restaurant"
+            >
+              <Seccions />
             </ProtectedRoute>
           } />
           <Route path="/user" element={<User />} />

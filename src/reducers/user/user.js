@@ -8,9 +8,6 @@ const initialState ={
 const userSlice = createSlice({
     name:'user',
     initialState:initialState,
-    reducers:{
-
-    },
     reducers: {
         setUser: (state, action) => {
             state.token = action.payload.token;

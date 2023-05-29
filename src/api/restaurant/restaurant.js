@@ -30,8 +30,7 @@ export async function getRestaurant(idRestaurand){
 }
 export async function createRestaurant(restaurant){
     try{
-        const token = sessionStorage.getItem(NAME_TOKEN);
-        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
             const {name,img} = restaurant;
             const formdata = new FormData()
             formdata.append('file', img)
@@ -45,11 +44,6 @@ export async function createRestaurant(restaurant){
             });
             console.log(response);
             return response;
-        } catch (error) {
-          // Manejar cualquier error en la petición
-          console.error(error);
-        }
-
     }catch(error){
         console.error(error);
     }

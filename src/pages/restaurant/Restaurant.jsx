@@ -1,9 +1,10 @@
 import  React,{useEffect,useState} from 'react';
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Navigation from '../../components/Navigation';
-import { 
-  getRestaurantsUser
-} from '../../api/restaurant/restaurant';
+// import { 
+//   getRestaurantsUser
+// } from '../../api/restaurant/restaurant';
+import { getRestaurantsUser } from '../../reducers/restaurant/restaurant';  
 import {
   Grid
 } from '@mui/material';
@@ -13,16 +14,21 @@ import FormCreateRestaurant from '../../components/FormCreateRestaurant';
 import { useTheme } from '@mui/material/styles';
 
 export default function Restaurant() {
+  const dispatch = useDispatch()
   const theme = useTheme();
   const [restaurants, setRestaurants] = useState([]);
   const [restaurantFilter, setRestaurantFilter] = useState([]);
 
   const [selectedOption, setSelectedOption] = useState(null)
-  const user = useSelector(state => state.user);
 
   const getDataRestaurant = async () =>{
-    let data = await getRestaurantsUser();
-    setRestaurants(data);
+    try {
+      const data = await dispatch(getRestaurantsUser());
+      console.log(data.payload);
+      setRestaurants(data.payload);
+    } catch (error) {
+      console.error(error);
+    }
   }
   useEffect(() => {
     const { nombre } = selectedOption || "";
@@ -68,7 +74,7 @@ export default function Restaurant() {
                 </Grid>
             </Grid>
             {restaurantFilter.map((restaurants)=>(
-                <Grid item  key={restaurants.restaurante_id} >
+                <Grid item key={restaurants.restaurante_id} >
                     <CardRestaurantUser
                       path={restaurants.path}
                       name={restaurants.nombre}

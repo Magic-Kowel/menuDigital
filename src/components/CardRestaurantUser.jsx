@@ -10,6 +10,7 @@ import {
     deleteRestaurant, 
     getRestaurantsUser 
 } from '../api/restaurant/restaurant';
+import MenuIcon from '@mui/icons-material/Menu';
 import { BASE_URL } from '../config';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
@@ -62,8 +63,8 @@ function CardRestaurantUser(props){
             </CardContent>
             <CardActions>
                 <Button 
-                onClick={()=>handleIsDeleteRestaurant(idRestaurant)}
-                size="small">
+                    onClick={()=>handleIsDeleteRestaurant(idRestaurant)}
+                    size="small">
                     Eliminar
                 </Button>
                 <Link 
@@ -72,6 +73,17 @@ function CardRestaurantUser(props){
                 >
                     <Button size="small">
                         Editar
+                    </Button>
+                </Link>
+                <Link 
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                    to={`/seccions/${idRestaurant}`}
+                >
+                    <Button 
+                        size="small"
+                        endIcon={<MenuIcon />}
+                    >
+                        Menu
                     </Button>
                 </Link>
             </CardActions>

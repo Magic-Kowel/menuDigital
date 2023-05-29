@@ -170,7 +170,7 @@ export default function Navigation(props) {
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </Box>
       </Box>
     </>

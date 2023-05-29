@@ -100,7 +100,7 @@ function FormCreateRestaurant({
                     >Crear</Button>
                   </CardActions>
                 </form>
-            </Card>
+          </Card>
     );
 }
 export default FormCreateRestaurant;
