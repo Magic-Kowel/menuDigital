@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import Restaurant from "./pages/restaurant/Restaurant";
 import RestaurantEdit from "./pages/restaurant/RestaurantEdit";
 import Seccions from "./pages/seccion/Seccions";
+import SeccionEdit from "./pages/seccion/SeccionEdit";
+import Product from "./pages/producto/Product";
 import User from "./pages/user/User";
 import NotFound from "./pages/NotFound";
 function App() {
@@ -33,6 +35,20 @@ function App() {
               permission="restaurant"
             >
               <Seccions />
+            </ProtectedRoute>
+          } />
+          <Route path="/seccion/edit/:idSeccion" element={
+            <ProtectedRoute
+              permission="restaurant"
+            >
+              <SeccionEdit />
+            </ProtectedRoute>
+          } />
+          <Route path="/producto/:idSeccion" element={
+            <ProtectedRoute
+              permission="restaurant"
+            >
+              <Product />
             </ProtectedRoute>
           } />
           <Route path="/user" element={<User />} />

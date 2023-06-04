@@ -7,10 +7,12 @@ import {
     Button,
     Typography
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { BASE_URL } from '../config';
-import { deleteSeccion, getSeccion } from '../reducers/seccion/seccion';
+import { deleteSeccion, getSeccions } from '../reducers/seccion/seccion';
 function CardSeccionUser({seccion}){
+    console.log(seccion);
     const dispatch = useDispatch();
     const handleIsDeleteSeccion = async (seccion)=>{
         const {seccion_id,restaurante_id} = seccion;
@@ -33,7 +35,7 @@ function CardSeccionUser({seccion}){
                 title: 'Eliminado',
                 text: 'Restaurante eliminado con éxito',
             })
-            dispatch(getSeccion(restaurante_id))
+            dispatch(getSeccions(restaurante_id))
             return false;
         }
         Swal.fire({
@@ -64,7 +66,22 @@ function CardSeccionUser({seccion}){
                 >
                     Eliminar
                 </Button>
-                <Button size="small">Editar</Button>
+                <Link 
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                    to={`/seccion/edit/${seccion.seccion_id}`}
+                >
+                    <Button size="small">
+                        Editar
+                    </Button>
+                </Link>
+                <Link 
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                    to={`/producto/${seccion.seccion_id}`}
+                >
+                    <Button size="small">
+                        Producto
+                    </Button>
+                </Link>
             </CardActions>
         </Card>
     );

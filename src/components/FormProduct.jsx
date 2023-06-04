@@ -1,9 +1,8 @@
-import {useState,useEffect} from "react"
-import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
+import { useRef,useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { createProduct,getProducts } from '../reducers/product/product';
 import { useParams } from "react-router-dom";
-import UploadImagen from "./UploadImagen";
-import { getSeccions,createSeccion } from "../reducers/seccion/seccion";   
+import Swal from "sweetalert2";
 import {
     Card,
     CardContent,
@@ -12,28 +11,28 @@ import {
     Typography,
     TextField
 } from '@mui/material';
-function FormCreateSeccion(){
+import CurrencyTextField from '@lupus-ai/mui-currency-textfield';
+import UploadImagen from './UploadImagen';
+function FormProduct(){
     const dispatch = useDispatch();
-    const { idRestaurant } = useParams();
+    const {idSeccion} = useParams();
+    const form = useRef(null);
     const [selectedFile, setSelectedFile] = useState("");
-    const [seccionForm, setSeccionForm] = useState({
-        name:"",
-        descripcion:"",
-        idRestaurant:idRestaurant,
-        file:null
-    });
-    useEffect(()=>{
-        setSeccionForm({
-            ...seccionForm,
-            file:selectedFile
-        })
-    },[selectedFile]);
-    const handleCreateSeccion = async (e) =>{
+    const handleSave = async (e) =>{
         e.preventDefault();
+        const formData = new FormData(form.current);
+        const product ={
+            'name': formData.get('name'),
+            'description': formData.get('description'),
+            'price': formData.get('price'),
+            'file': selectedFile,
+            'idSeccion': idSeccion
+        }
         if(
-            seccionForm.name.trim()==="" ||
-            seccionForm.descripcion.trim()==="" ||
-            !seccionForm.file
+            product.name.trim()==="" ||
+            product.description.trim()==="" ||
+            product.price.trim()==="" ||
+            !product.file
         ){
             Swal.fire({
               icon: "info",
@@ -42,21 +41,16 @@ function FormCreateSeccion(){
             })
             return false;
         }
+        console.log(product);
         try {
-            const data = await dispatch(createSeccion(seccionForm));
-            if(data.payload.created){
-                dispatch(getSeccions(idRestaurant));
+            const response = await dispatch(createProduct(product));
+            if(response.payload.created){
+                dispatch(getProducts(idSeccion))
                 Swal.fire({
                     icon:"success",
                     title: 'Guardado',
-                    text: 'Seccion guardado con éxito',
-                })
-                setSeccionForm({
-                    name:"",
-                    descripcion:"",
-                    idRestaurant:idRestaurant,
-                    file:null
-                })
+                    text: 'Producto guardado con éxito',
+                });
             }else{
                 Swal.fire({
                     icon:"error",
@@ -65,14 +59,16 @@ function FormCreateSeccion(){
                 })
             }
         } catch (error) {
-            console.error(error);
+            
         }
+        
     }
     return(
         <Card sx={{ minWidth: 275 }} elevation={3}>
             <form
+                ref={form}
+                onSubmit={handleSave}
                 autoComplete="off"
-                onSubmit={handleCreateSeccion}
                 >
                 <CardContent>
                         <Typography
@@ -84,40 +80,41 @@ function FormCreateSeccion(){
                                 textAlign:'center'
                             }}
                         >
-                        Crear Seccion
+                        Crear Product
                         </Typography>
                         <TextField 
                             id="name"
-                            value={seccionForm.name}
+                            name="name"
                             label="Nombre" 
                             variant="standard"
                             fullWidth
-                            onChange={(e)=>{
-                                setSeccionForm({
-                                    ...seccionForm,
-                                    name:e.target.value
-                                })
-                            }}
                             sx={{marginTop:3}}
                         />
                         <TextField
                             sx={{marginTop:3}}
-                            value={seccionForm.descripcion}
+                            name="description"
                             label="Descripcion"
                             fullWidth
                             multiline
-                            onChange={(e)=>{
-                                setSeccionForm({
-                                    ...seccionForm,
-                                    descripcion:e.target.value
-                                })
-                            }}
+                        />
+                    
+                        <CurrencyTextField
+                            sx={{ marginTop: 3 }}
+                            name="price"
+                            label="Precio"
+                            variant="standard"
+                            fullWidth
+                            currencySymbol="$"
+                            minimumValue={0}
+                            outputFormat="number"
+                            decimalCharacter="."
+                            digitGroupSeparator=","
+                        />
+                        <UploadImagen 
+                            setSelectedFile={setSelectedFile}
+                            selectedFile={selectedFile}
                         />
                 </CardContent>
-                <UploadImagen 
-                    setSelectedFile={setSelectedFile}
-                    selectedFile={selectedFile}
-                />
                 <CardActions>
                     <Button
                         fullWidth
@@ -130,6 +127,6 @@ function FormCreateSeccion(){
                 </CardActions>
             </form>
         </Card>
-    );
+    )
 }
-export default FormCreateSeccion;
+export default FormProduct;

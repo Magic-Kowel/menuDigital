@@ -1,7 +1,6 @@
 import React,{ useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useParams } from "react-router-dom";
 import Navigation from "../../components/Navigation";
 import { 
     getRestaurant,
@@ -72,14 +71,6 @@ function RestaurantEdit(){
         getRestaurantData(idRestaurant);
         console.log(selectedFile);
     },[restaurant.path]);
-    // useEffect(()=>{
-    //     console.log("imagen update",selectedFile);
-    //     setRestaurant({
-    //       ...restaurant,
-    //       path:selectedFile
-    //     });
-    //     console.log("imagen update2",restaurant);
-    //   },[selectedFile]);
     return(
         <>
             <Navigation>

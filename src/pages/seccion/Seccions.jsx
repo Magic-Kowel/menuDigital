@@ -1,52 +1,50 @@
-import {useState,useEffect} from "react"
+import {useState,useEffect,useMemo} from "react"
 import { useParams } from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import Navigation from "../../components/Navigation"
 import CardSeccionUser from "../../components/CardSeccionUser";
-import { getSeccion } from "../../reducers/seccion/seccion";
+import { getSeccions } from "../../reducers/seccion/seccion";
 import {
-    Grid,
-    Pagination
+    Grid
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import FormCreateSeccion from "../../components/FormCreateSeccion";
 import SearchFilter from "../../components/SearchFilter";
+import PaginationBar from '../../components/PaginationBar';
 function Seccion(){
     const dispatch = useDispatch();
     const theme = useTheme();
-    const dataSeccions = useSelector(state => state.seccion);
+    const dataSeccions = useSelector((state) => state.seccion);
     const { idRestaurant } = useParams();
     const [seccions, setSeccions] = useState([]);
     const [restaurantFilter, setRestaurantFilter] = useState([]);
-    const [selectedOption, setSelectedOption] = useState(null)
+    const [selectedOption, setSelectedOption] = useState(null);
     const getDataSeccion = async () => {
-        const data = await dispatch(getSeccion(idRestaurant));
-    }
+        const data = await dispatch(getSeccions(idRestaurant));
+    };
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 6;
     useEffect(() => {
-        const { nombre } = selectedOption || "";
+        const { nombre } = selectedOption || '';
         let data = seccions;
         if (nombre) {
-          data = seccions.filter((item) =>
-            item.nombre.toLowerCase().includes(nombre.toLowerCase())
-          );
+        data = seccions.filter((item) => item.nombre.toLowerCase().includes(nombre.toLowerCase()));
         }
         setRestaurantFilter(data);
     }, [seccions, selectedOption]);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = restaurantFilter.slice(indexOfFirstItem, indexOfLastItem);
-    useEffect(()=>{
+    useEffect(() => {
         console.log(dataSeccions);
         getDataSeccion();
-    },[])
+    }, []);
     useEffect(() => {
         setSeccions(dataSeccions.seccions);
     }, [dataSeccions]);
-    const handleChangePage = (event, page) =>{
+    const handleChangePage = (event, page) => {
         setCurrentPage(page);
-    }
+    };
     return(
         <Navigation>
             <Grid container spacing={2}>
@@ -83,15 +81,13 @@ function Seccion(){
                         </Grid>
                     ))  
                 }
+                <PaginationBar
+                    currentPage={currentPage}
+                    restaurantFilter={restaurantFilter}
+                    handleChangePage={handleChangePage}
+                />
                 </Grid>
             </Grid>
-            <Pagination 
-                count={Math.ceil(restaurantFilter.length / itemsPerPage)}
-                page={currentPage}
-                showFirstButton 
-                showLastButton
-                onChange={handleChangePage}
-            />
         </Navigation>
     );
 }
